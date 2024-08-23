@@ -4,3 +4,6 @@
 [submodule "external/value_types"]
 	path = external/value_types
 	url = https://github.com/jbcoe/value_types.git
+[submodule "external/robin-map"]
+	path = external/robin-map
+	url = git@github.com:Tessil/robin-map.git
