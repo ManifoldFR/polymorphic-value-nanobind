@@ -2,6 +2,7 @@
 
 #include <nanobind/stl/bind_vector.h>
 #include <nanobind/stl/string.h>
+#include <nanobind/trampoline.h>
 #include <vector>
 
 namespace nb = nanobind;
@@ -22,6 +23,11 @@ struct Y : X {
   std::string hello() const override { return "Hello, I'm derived class Y!"; }
 };
 
+struct PyX : X {
+  NB_TRAMPOLINE(X, 1);
+  std::string hello() const override { NB_OVERRIDE(hello); }
+};
+
 void echoX(const X &x) { printf("X says: %s\n", x.hello().c_str()); }
 
 Poly_X getY() { return Poly_X{Y()}; }
@@ -39,7 +45,7 @@ void echoX_list(const XVec &xs) {
 
 NB_MODULE(myext, m) {
 
-  nb::class_<X>(m, "X").def(nb::init<>()).def("hello", &X::hello);
+  nb::class_<X, PyX>(m, "X").def(nb::init<>()).def("hello", &X::hello);
 
   nb::class_<Y, X>(m, "Y").def(nb::init<>());
 
