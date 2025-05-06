@@ -11,10 +11,14 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
                                                "RelWithDebInfo")
 endif()
 
-find_package(Python 3.8 REQUIRED COMPONENTS Development.Module Interpreter)
+find_package(Python 3.10 REQUIRED COMPONENTS Development.Module Interpreter)
+# Detect the installed nanobind package and import it into CMake
+execute_process(
+  COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
+  OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE nanobind_ROOT)
+find_package(nanobind CONFIG REQUIRED)
 
 add_subdirectory(external/robin-map)
-add_subdirectory(external/nanobind)
 add_subdirectory(external/value_types)
 
 set(SOURCES src/lib.cpp)
